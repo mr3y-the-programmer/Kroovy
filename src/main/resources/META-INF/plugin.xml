@@ -1,19 +1,10 @@
 <idea-plugin>
-    <id>com.github.mr3ytheprogrammer.kroovy</id>
+    <id>com.mr3y.plugins.kroovy</id>
     <name>Kroovy</name>
-    <vendor>mr3y-the-programmer</vendor>
+    <vendor url="https://github.com/mr3y-the-programmer">mr3y-the-programmer</vendor>
 
     <!-- Product and plugin compatibility requirements -->
     <!-- https://www.jetbrains.org/intellij/sdk/docs/basics/getting_started/plugin_compatibility.html -->
     <depends>com.intellij.modules.platform</depends>
 
-    <extensions defaultExtensionNs="com.intellij">
-        <applicationService serviceImplementation="com.github.mr3ytheprogrammer.kroovy.services.MyApplicationService"/>
-        <projectService serviceImplementation="com.github.mr3ytheprogrammer.kroovy.services.MyProjectService"/>
-    </extensions>
-
-    <applicationListeners>
-        <listener class="com.github.mr3ytheprogrammer.kroovy.listeners.MyProjectManagerListener"
-                  topic="com.intellij.openapi.project.ProjectManagerListener"/>
-    </applicationListeners>
 </idea-plugin>
