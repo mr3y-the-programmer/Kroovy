@@ -3,8 +3,19 @@
     <name>Kroovy</name>
     <vendor url="https://github.com/mr3y-the-programmer">mr3y-the-programmer</vendor>
 
-    <!-- Product and plugin compatibility requirements -->
-    <!-- https://www.jetbrains.org/intellij/sdk/docs/basics/getting_started/plugin_compatibility.html -->
     <depends>com.intellij.modules.platform</depends>
 
+    <actions>
+        <!--TODO: Add Group Icon-->
+        <group text="Kroovy" compact="true" description="Group for kroovy actions"
+               id="com.mr3y.plugins.kroovy.MainGroup" popup="true">
+            <add-to-group group-id="PairFileActions" anchor="after" relative-to-action="CompareFileWithEditor"/>
+            <!--To Use this action in a new group/place, you must use a new id -->
+            <action id="com.mr3y.plugins.kroovy.Main" class="com.mr3y.plugins.kroovy.ConvertAction" text="Convert to .kts"
+                    description="Convert .gradle file from groovy syntax to Use kotlin DSL syntax">
+                <keyboard-shortcut keymap="$default" first-keystroke="shift K"/>
+                <synonym text="2Kts" /> <!--Help users find it easily-->
+            </action>
+        </group>
+    </actions>
 </idea-plugin>
