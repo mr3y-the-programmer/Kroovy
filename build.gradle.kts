@@ -4,8 +4,6 @@ import org.jetbrains.changelog.markdownToHTML
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 plugins {
-    // Java support
-    id("java")
     // Kotlin support
     id("org.jetbrains.kotlin.jvm") version "1.4.21"
     // gradle-intellij-plugin - read more: https://github.com/JetBrains/gradle-intellij-plugin
@@ -42,6 +40,7 @@ repositories {
     jcenter()
 }
 dependencies {
+    compileOnly("org.jetbrains.kotlin:kotlin-compiler-embeddable:1.3.31")
     detektPlugins("io.gitlab.arturbosch.detekt:detekt-formatting:1.15.0")
 }
 
@@ -91,6 +90,7 @@ tasks {
         untilBuild(pluginUntilBuild)
 
         // Extract the <!-- Plugin description --> section from README.md and provide for the plugin's manifest
+        // TODO: update README to include description
         pluginDescription(
             closure {
                 File("./README.md").readText().lines().run {
