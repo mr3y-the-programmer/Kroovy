@@ -16,6 +16,8 @@
 
 package com.mr3y.plugins.kroovy
 
+import java.lang.Exception
+
 /**
  * After Starting the convert/migrate action, we have to return a result to
  * notify the user about the current progress, this result has 3 states:
@@ -32,5 +34,7 @@ sealed class ConvertResult{
 
 sealed class Finished: ConvertResult() {
     object Succeeded: Finished()
-    object Failed: Finished()
+    data class Failed(private val message: String, val exception: Exception? = null): Finished() {
+        fun getMessage() = if(message.isNotEmpty()) message else "Unknown failure occurred, try again"
+    }
 }
