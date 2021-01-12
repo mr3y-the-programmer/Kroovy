@@ -42,6 +42,7 @@ repositories {
 }
 dependencies {
     compileOnly("org.jetbrains.kotlin:kotlin-compiler-embeddable:1.3.31")
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.4.2")
     detektPlugins("io.gitlab.arturbosch.detekt:detekt-formatting:1.15.0")
 }
 
