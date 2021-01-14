@@ -6,4 +6,9 @@ updates:
   - package-ecosystem: "gradle"
     directory: "/"
     schedule:
-      interval: "daily"
+      interval: "weekly" # avoid updating daily, it is spammy
+      day: "sunday"
+    open-pull-requests-limit: 3
+#    target-branch: "develop"
+#    ignore:
+#      - versions: ["x.x.*"] # temporary, ignore patch updates
