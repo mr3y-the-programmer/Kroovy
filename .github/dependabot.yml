@@ -12,3 +12,9 @@ updates:
 #    target-branch: "develop"
 #    ignore:
 #      - versions: ["x.x.*"] # temporary, ignore patch updates
+
+  - package-ecosystem: "github-actions"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+    open-pull-requests-limit: 3
