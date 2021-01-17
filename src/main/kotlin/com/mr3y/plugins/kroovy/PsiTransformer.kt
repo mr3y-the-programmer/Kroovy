@@ -19,11 +19,14 @@ package com.mr3y.plugins.kroovy
 import com.intellij.psi.PsiFile
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
+import org.jetbrains.kotlin.psi.KtPsiFactory
 import org.jetbrains.plugins.groovy.lang.psi.GroovyFile
+import org.jetbrains.plugins.groovy.lang.psi.GroovyPsiElementFactory
 import org.jetbrains.plugins.groovy.lang.psi.GroovyRecursiveElementVisitor
+import org.jetbrains.plugins.groovy.lang.psi.api.statements.GrVariableDeclaration
+import org.jetbrains.plugins.groovy.lang.psi.api.statements.expressions.GrAssignmentExpression
 
-// TODO: consider if it should be object
-class PsiTransformer {
+object PsiTransformer {
 
     // investigate if there are action edge cases to be handled(i.e avoid send the event again)
     private val _transformResult = MutableStateFlow(ConvertResult.Initial)
@@ -39,9 +42,8 @@ class PsiTransformer {
         require(file is GroovyFile && file.isScript) {
             return@transform Finished.Failed("Transformation Failure, the file isn't a valid groovy script file")
         }
-        file.accept(object : GroovyRecursiveElementVisitor() {
-
-        })
+        // TODO: rename file to .kts, see PsiCookbook
+        file.accept(GroovyVisitor(file.project))
         return Finished.Succeeded
     }
 }
