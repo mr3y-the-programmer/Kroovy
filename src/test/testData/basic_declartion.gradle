@@ -1,0 +1,3 @@
+def versionMajor = 0
+def versionMinor = 6
+def versionPatch = 2
