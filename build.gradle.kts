@@ -41,9 +41,10 @@ repositories {
     jcenter()
 }
 dependencies {
-    compileOnly("org.jetbrains.kotlin:kotlin-compiler-embeddable:1.4.21")
+    implementation("org.jetbrains.kotlin:kotlin-compiler-embeddable:1.4.21")
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.4.2")
     detektPlugins("io.gitlab.arturbosch.detekt:detekt-formatting:1.15.0")
+    testImplementation("junit:junit:4.13")
 }
 
 // Configure gradle-intellij-plugin plugin.
@@ -90,6 +91,12 @@ tasks {
         setIdeDirectory("C:\\Program Files\\Android\\Android Studio")
     }
 
+    withType<Test> {
+        systemProperty(
+            "idea.home.path",
+            "C:\\Users\\pc\\.gradle\\caches\\modules-2\\files-2.1\\com.jetbrains.intellij.idea\\ideaIC\\2020.1\\6becac80419981b057df9cf0c62efcd94e6075a8"
+        )
+    }
     patchPluginXml {
         version(pluginVersion)
         sinceBuild(pluginSinceBuild)
