@@ -17,7 +17,16 @@ name: Build
 on: [push, pull_request]
 jobs:
 
-  # Run Gradle Wrapper Validation Action to verify the wrapper's checksum
+  cleanup:
+    name: Cleanup
+    runs-on: ubuntu-latest
+    steps:
+      - name: Cancel Previous Runs  # quick sanity check to cancel previous build workflows if they're not completed
+        uses: styfle/cancel-workflow-action@0.7.0
+        with:
+          access_token: ${{ github.token }}
+
+      # Run Gradle Wrapper Validation Action to verify the wrapper's checksum
   gradleValidation:
     name: Gradle Wrapper
     runs-on: ubuntu-latest
