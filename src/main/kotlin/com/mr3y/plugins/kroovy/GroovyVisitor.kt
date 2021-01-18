@@ -17,12 +17,13 @@
 package com.mr3y.plugins.kroovy
 
 import com.intellij.openapi.project.Project
-import com.intellij.psi.PsiElement
+import com.intellij.openapi.util.Conditions
+import com.intellij.psi.util.PsiTreeUtil
 import org.jetbrains.kotlin.psi.KtPsiFactory
-import org.jetbrains.plugins.groovy.lang.psi.GroovyFile
 import org.jetbrains.plugins.groovy.lang.psi.GroovyRecursiveElementVisitor
+import org.jetbrains.plugins.groovy.lang.psi.api.statements.GrVariable
 import org.jetbrains.plugins.groovy.lang.psi.api.statements.GrVariableDeclaration
-import org.jetbrains.plugins.groovy.lang.psi.api.statements.expressions.GrAssignmentExpression
+import org.jetbrains.plugins.groovy.lang.psi.api.types.GrBuiltInTypeElement
 
 class GroovyVisitor(private val project: Project): GroovyRecursiveElementVisitor(){
 
@@ -32,10 +33,26 @@ class GroovyVisitor(private val project: Project): GroovyRecursiveElementVisitor
 
     override fun visitVariableDeclaration(variableDeclaration: GrVariableDeclaration) {
         super.visitVariableDeclaration(variableDeclaration)
-        if (variableDeclaration is GrAssignmentExpression) {
-            val valModifier = factory.createValKeyword().firstChild
-            variableDeclaration.modifierList.firstChild!!.replace(valModifier)
+        val varInitializing = PsiTreeUtil.getChildOfType(variableDeclaration, GrVariable::class.java)!!
+        if (varInitializing.text.contains("=")) {
+            val modifiers = variableDeclaration.modifierList
+            if (modifiers.text.contains("def")) {
+                val valModifier = factory.createValKeyword().firstChild
+                modifiers.replace(valModifier)
+                return
+            }
+            val type = PsiTreeUtil.findChildOfType(variableDeclaration, GrBuiltInTypeElement::class.java)!!
+            val typedVariable = factory.createProperty("val x: ${type.text.capitalize()} = 1")
+            typedVariable.findElementAt(4)!!.replace(varInitializing.firstChild)
+            typedVariable.lastChild!!.replace(varInitializing.lastChild)
             return
         }
+        for (variable in variableDeclaration.variables) {
+            val abstractDeclarationInKotlin = factory.createValKeyword()
+            abstractDeclarationInKotlin.findElementAt(4)!!.replace(variable.nameIdentifier!!)
+            val parent = PsiTreeUtil.findFirstParent(variableDeclaration, Conditions.alwaysTrue())
+            parent?.addAfter(abstractDeclarationInKotlin, variableDeclaration)
+        }
+        variableDeclaration.removeStatement() // it can be safely removed now
     }
 }
