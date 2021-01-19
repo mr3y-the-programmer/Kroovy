@@ -13,7 +13,7 @@
             <!--To Use this action in a new group/place, you must use a new id -->
             <action id="com.mr3y.plugins.kroovy.Main" class="com.mr3y.plugins.kroovy.ConvertAction" text="Convert to .kts"
                     description="Convert .gradle file from groovy syntax to Use kotlin DSL syntax">
-                <keyboard-shortcut keymap="$default" first-keystroke="shift K"/>
+                <keyboard-shortcut keymap="$default" first-keystroke="shift alt K"/>
                 <synonym text="2Kts" /> <!--Help users find it easily-->
             </action>
         </group>
