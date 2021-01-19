@@ -19,12 +19,7 @@ package com.mr3y.plugins.kroovy
 import com.intellij.psi.PsiFile
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
-import org.jetbrains.kotlin.psi.KtPsiFactory
 import org.jetbrains.plugins.groovy.lang.psi.GroovyFile
-import org.jetbrains.plugins.groovy.lang.psi.GroovyPsiElementFactory
-import org.jetbrains.plugins.groovy.lang.psi.GroovyRecursiveElementVisitor
-import org.jetbrains.plugins.groovy.lang.psi.api.statements.GrVariableDeclaration
-import org.jetbrains.plugins.groovy.lang.psi.api.statements.expressions.GrAssignmentExpression
 
 object PsiTransformer {
 
