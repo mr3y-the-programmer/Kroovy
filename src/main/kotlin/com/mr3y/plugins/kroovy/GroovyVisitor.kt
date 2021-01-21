@@ -18,11 +18,15 @@ package com.mr3y.plugins.kroovy
 
 import com.intellij.openapi.project.Project
 import com.intellij.openapi.util.Conditions
+import com.intellij.psi.PsiElement
 import com.intellij.psi.util.PsiTreeUtil
+import org.jetbrains.kotlin.daemon.common.trimQuotes
 import org.jetbrains.kotlin.psi.KtPsiFactory
 import org.jetbrains.plugins.groovy.lang.psi.GroovyRecursiveElementVisitor
 import org.jetbrains.plugins.groovy.lang.psi.api.statements.GrVariable
 import org.jetbrains.plugins.groovy.lang.psi.api.statements.GrVariableDeclaration
+import org.jetbrains.plugins.groovy.lang.psi.api.statements.expressions.GrAssignmentExpression
+import org.jetbrains.plugins.groovy.lang.psi.api.statements.expressions.literals.GrLiteral
 import org.jetbrains.plugins.groovy.lang.psi.api.types.GrBuiltInTypeElement
 
 class GroovyVisitor(private val project: Project): GroovyRecursiveElementVisitor(){
@@ -54,5 +58,23 @@ class GroovyVisitor(private val project: Project): GroovyRecursiveElementVisitor
             parent?.addAfter(abstractDeclarationInKotlin, variableDeclaration)
         }
         variableDeclaration.removeStatement() // it can be safely removed now
+    }
+
+    override fun visitAssignmentExpression(expression: GrAssignmentExpression) {
+        super.visitAssignmentExpression(expression)
+        val rOperand = expression.lastChild
+        if(isSingleQuotedString(rOperand)) {
+            val ktString = factory.createLiteralStringTemplateEntry(rOperand.text.trimQuotes())
+            rOperand.replace(ktString)
+            return
+        }
+    }
+
+    private fun isSingleQuotedString(element: PsiElement): Boolean {
+        return (element is GrLiteral && element.text.matches(SINGLE_QUOTED_PATTERN.toRegex()))
+    }
+
+    companion object {
+        private const val SINGLE_QUOTED_PATTERN = """^'.{2,}'$"""
     }
 }
