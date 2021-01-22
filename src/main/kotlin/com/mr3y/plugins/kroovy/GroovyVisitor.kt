@@ -27,6 +27,8 @@ import org.jetbrains.plugins.groovy.lang.psi.api.statements.GrVariable
 import org.jetbrains.plugins.groovy.lang.psi.api.statements.GrVariableDeclaration
 import org.jetbrains.plugins.groovy.lang.psi.api.statements.expressions.GrAssignmentExpression
 import org.jetbrains.plugins.groovy.lang.psi.api.statements.expressions.literals.GrLiteral
+import org.jetbrains.plugins.groovy.lang.psi.api.statements.expressions.path.GrCallExpression
+import org.jetbrains.plugins.groovy.lang.psi.api.statements.expressions.path.GrMethodCallExpression
 import org.jetbrains.plugins.groovy.lang.psi.api.types.GrBuiltInTypeElement
 
 class GroovyVisitor(private val project: Project): GroovyRecursiveElementVisitor(){
@@ -34,6 +36,8 @@ class GroovyVisitor(private val project: Project): GroovyRecursiveElementVisitor
     private val factory by lazy {
         KtPsiFactory(project)
     }
+
+    //TODO: add codeStyleManager
 
     override fun visitVariableDeclaration(variableDeclaration: GrVariableDeclaration) {
         super.visitVariableDeclaration(variableDeclaration)
@@ -68,6 +72,20 @@ class GroovyVisitor(private val project: Project): GroovyRecursiveElementVisitor
             rOperand.replace(ktString)
             return
         }
+    }
+
+    override fun visitMethodCallExpression(methodCallExpression: GrMethodCallExpression) {
+        super.visitMethodCallExpression(methodCallExpression)
+        val callExpressionWithQuotes = StringBuilder(methodCallExpression.firstChild.text)
+        callExpressionWithQuotes.append('(')
+        for (argument in methodCallExpression.argumentList.allArguments) {
+            callExpressionWithQuotes.append(argument.text)
+            callExpressionWithQuotes.append(',')
+        }
+        callExpressionWithQuotes.deleteCharAt(callExpressionWithQuotes.length - 1) // rm last argument comma
+        callExpressionWithQuotes.append(')')
+        methodCallExpression.replace(factory.createExpression(callExpressionWithQuotes.toString()))
+        return
     }
 
     private fun isSingleQuotedString(element: PsiElement): Boolean {
