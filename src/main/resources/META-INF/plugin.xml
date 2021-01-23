@@ -9,7 +9,7 @@
         <!--TODO: Add Group Icon-->
         <group text="Kroovy" compact="true" description="Group for kroovy actions"
                id="com.mr3y.plugins.kroovy.MainGroup" popup="true">
-            <add-to-group group-id="PairFileActions" anchor="after" relative-to-action="CompareFileWithEditor"/>
+            <add-to-group group-id="ToolsMenu" anchor="last"/>
             <!--To Use this action in a new group/place, you must use a new id -->
             <action id="com.mr3y.plugins.kroovy.Main" class="com.mr3y.plugins.kroovy.ConvertAction" text="Convert to .kts"
                     description="Convert .gradle file from groovy syntax to Use kotlin DSL syntax">
