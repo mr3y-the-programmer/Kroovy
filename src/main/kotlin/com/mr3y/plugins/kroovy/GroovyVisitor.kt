@@ -79,7 +79,10 @@ class GroovyVisitor(private val project: Project): GroovyRecursiveElementVisitor
         val callExpressionWithQuotes = StringBuilder(methodCallExpression.firstChild.text)
         callExpressionWithQuotes.append('(')
         for (argument in methodCallExpression.argumentList.allArguments) {
-            callExpressionWithQuotes.append(argument.text)
+            if(isSingleQuotedString(argument)) {
+                val ktString = factory.createLiteralStringTemplateEntry(argument.text.trimQuotes())
+                callExpressionWithQuotes.append(ktString)
+            }
             callExpressionWithQuotes.append(',')
         }
         callExpressionWithQuotes.deleteCharAt(callExpressionWithQuotes.length - 1) // rm last argument comma
