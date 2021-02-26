@@ -15,6 +15,7 @@ plugins {
     id("io.gitlab.arturbosch.detekt") version "1.15.0"
     // ktlint linter - read more: https://github.com/JLLeitschuh/ktlint-gradle
     id("org.jlleitschuh.gradle.ktlint") version "9.4.1"
+    kotlin("jvm") version "1.4.31"
 }
 
 // Import variables from gradle.properties file
@@ -44,6 +45,7 @@ dependencies {
     implementation("org.jetbrains.kotlin:kotlin-compiler-embeddable:1.4.30")
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.4.2")
     detektPlugins("io.gitlab.arturbosch.detekt:detekt-formatting:1.15.0")
+    implementation(kotlin("stdlib-jdk8"))
 }
 
 // Configure gradle-intellij-plugin plugin.
@@ -131,4 +133,12 @@ tasks {
         // https://jetbrains.org/intellij/sdk/docs/tutorials/build_system/deployment.html#specifying-a-release-channel
         channels(pluginVersion.split('-').getOrElse(1) { "default" }.split('.').first())
     }
+}
+val compileKotlin: KotlinCompile by tasks
+compileKotlin.kotlinOptions {
+    jvmTarget = "1.8"
+}
+val compileTestKotlin: KotlinCompile by tasks
+compileTestKotlin.kotlinOptions {
+    jvmTarget = "1.8"
 }
